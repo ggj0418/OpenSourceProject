@@ -92,25 +92,6 @@ public class Encryption {
         return aesKey;
     }
 
-//    public static String encrypt(String plainText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-//        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
-//        Cipher cipher = Cipher.getInstance("AES");
-//        cipher.init(Cipher.ENCRYPT_MODE, secureKey);
-//        byte[] encryptedText = cipher.doFinal(plainText.getBytes("UTF-8"));
-//        String encryptResult = new String(encryptedText);
-//
-//        return encryptResult;
-//    }
-//
-//    public static String decrypt(String encryptedText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-//        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
-//        Cipher cipher = Cipher.getInstance("AES");
-//        cipher.init(Cipher.DECRYPT_MODE, secureKey);
-//        byte[] decryptedText = cipher.doFinal(encryptedText.getBytes("UTF-8"));
-//        String decryptResult = new String(decryptedText);
-//
-//        return decryptResult;
-//    }
     public static String encrypt(String plainText, String attribute) throws Exception {
         SecureRandom random = new SecureRandom();
         byte bytes[] = new byte[20];

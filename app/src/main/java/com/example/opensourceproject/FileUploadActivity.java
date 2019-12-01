@@ -29,7 +29,7 @@ import javax.crypto.NoSuchPaddingException;
 public class FileUploadActivity extends AppCompatActivity {
 
     private TextView toUploadText, fileNameText, userIdText, psedonimIdText, contentText, objectText;
-    private Button psedonimButton, encryptButton, decryptButton, uploadButton;
+    private Button psedonimButton, encryptButton, uploadButton;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6;
     private CheckBox checkBox7, checkBox8, checkBox9, checkBox10, checkBox11, checkBox12;
 
@@ -136,18 +136,6 @@ public class FileUploadActivity extends AppCompatActivity {
                 String plainText = contentText.getText().toString();
                 try {
                     objectText.setText(Encryption.encrypt(plainText, andRemarks));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        decryptButton = (Button) findViewById(R.id.decryptButton);
-        decryptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String encryptText = objectText.getText().toString();
-                try {
-                    objectText.setText(Encryption.decrypt(encryptText, andRemarks));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
