@@ -22,11 +22,17 @@ import java.util.ArrayList;
 
 public class FileBrowseActivity extends AppCompatActivity {
 
+    private String userID, remarks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_file_browse);
+
+        Intent fromMainIntent = getIntent();
+        userID = fromMainIntent.getExtras().getString("loginID");
+        remarks = fromMainIntent.getExtras().getString("remarks");
     }
 }

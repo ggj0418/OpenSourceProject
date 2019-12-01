@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                         String loginID = jsonObject.get("LoginID").getAsString();
                                         String remarks = jsonObject.get("REMARKS").getAsString();
 
-                                        Intent toFileIntent = new Intent(MainActivity.this, FileUploadActivity.class);
+                                        Intent toFileIntent = new Intent(MainActivity.this, FileBrowseActivity.class);
                                         toFileIntent.putExtra("loginID", loginID);
                                         toFileIntent.putExtra("remarks", remarks);
                                         startActivity(toFileIntent);

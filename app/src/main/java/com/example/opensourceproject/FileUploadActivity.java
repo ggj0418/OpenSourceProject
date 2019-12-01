@@ -54,7 +54,7 @@ public class FileUploadActivity extends AppCompatActivity {
 
         Intent fromMainIntent = getIntent();
         final String userID = fromMainIntent.getExtras().getString("loginID");
-        final String remarks = fromMainIntent.getExtras().getString("remarks");
+//        final String remarks = fromMainIntent.getExtras().getString("remarks");
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
