@@ -1,15 +1,23 @@
 package com.example.opensourceproject;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.security.AlgorithmParameters;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Encryption {
@@ -67,7 +75,7 @@ public class Encryption {
 //        return dec;
 //    }
 
-    public static byte[] createAESKey(String andAttribute) {
+    public static byte[] createAESKey(String andAttribute) throws UnsupportedEncodingException {
         String[] temp = andAttribute.split(",");
         StringBuilder keyBuilder = new StringBuilder();
         for(int i=0;i<temp.length;i++) {
@@ -79,28 +87,78 @@ public class Encryption {
                 keyBuilder.append("t");
             }
         }
-        byte[] aesKey = keyBuilder.toString().getBytes();
+        byte[] aesKey = keyBuilder.toString().getBytes("UTF-8");
 
         return aesKey;
     }
 
-    public static String encrypt(String plainText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, secureKey);
-        byte[] encryptedText = cipher.doFinal(plainText.getBytes("UTF-8"));
-        String encryptResult = new String(encryptedText);
+//    public static String encrypt(String plainText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+//        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
+//        Cipher cipher = Cipher.getInstance("AES");
+//        cipher.init(Cipher.ENCRYPT_MODE, secureKey);
+//        byte[] encryptedText = cipher.doFinal(plainText.getBytes("UTF-8"));
+//        String encryptResult = new String(encryptedText);
+//
+//        return encryptResult;
+//    }
+//
+//    public static String decrypt(String encryptedText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+//        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
+//        Cipher cipher = Cipher.getInstance("AES");
+//        cipher.init(Cipher.DECRYPT_MODE, secureKey);
+//        byte[] decryptedText = cipher.doFinal(encryptedText.getBytes("UTF-8"));
+//        String decryptResult = new String(decryptedText);
+//
+//        return decryptResult;
+//    }
+    public static String encrypt(String plainText, String attribute) throws Exception {
+        SecureRandom random = new SecureRandom();
+        byte bytes[] = new byte[20];
+        random.nextBytes(bytes);
+        byte[] saltBytes = bytes;
 
-        return encryptResult;
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        PBEKeySpec spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+
+        SecretKey secretKey = factory.generateSecret(spec);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        AlgorithmParameters parameters = cipher.getParameters();
+        byte[] ivBytes = parameters.getParameterSpec(IvParameterSpec.class).getIV();
+
+        byte[] encryptedTextBytes = cipher.doFinal(plainText.getBytes("UTF-8"));
+
+        byte[] buffer = new byte[saltBytes.length + ivBytes.length + encryptedTextBytes.length];
+        System.arraycopy(saltBytes, 0, buffer, 0, saltBytes.length);
+        System.arraycopy(ivBytes, 0, buffer, saltBytes.length, ivBytes.length);
+        System.arraycopy(encryptedTextBytes, 0, buffer, saltBytes.length + ivBytes.length, encryptedTextBytes.length);
+
+        return Base64.getEncoder().encodeToString(buffer);
     }
 
-    public static String decrypt(String encryptedText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, secureKey);
-        byte[] decryptedText = cipher.doFinal(encryptedText.getBytes());
-        String decryptResult = new String(decryptedText);
+    public static String decrypt(String encryptText, String attribute) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        ByteBuffer buffer = ByteBuffer.wrap(Base64.getDecoder().decode(encryptText));
 
-        return decryptResult;
+        byte[] saltBytes = new byte[20];
+        buffer.get(saltBytes, 0, saltBytes.length);
+        byte[] ivBytes = new byte[cipher.getBlockSize()];
+        buffer.get(ivBytes, 0, ivBytes.length);
+        byte[] encryoptedTextBytes = new byte[buffer.capacity() - saltBytes.length - ivBytes.length];
+        buffer.get(encryoptedTextBytes);
+
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        PBEKeySpec spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+
+        SecretKey secretKey = factory.generateSecret(spec);
+        SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
+
+        cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(ivBytes));
+
+        byte[] decryptedTextBytes = cipher.doFinal(encryoptedTextBytes);
+
+        return new String(decryptedTextBytes);
     }
 }

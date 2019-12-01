@@ -304,8 +304,19 @@
         android:layout_marginEnd="10dp"
         android:text="Encrypt"
         android:textStyle="bold"
-        android:textSize="5dp"
+        android:textSize="15dp"
         android:id="@+id/encryptButton"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.35"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Decrypt"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:id="@+id/decryptButton"/>
 
     <LinearLayout
         android:layout_width="match_parent"
