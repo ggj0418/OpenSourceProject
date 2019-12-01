@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends BaseAdapter {
+public class FileAdapter extends BaseAdapter {
 
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
     ArrayList<File> fileArrayList = new ArrayList<File>();
 
-    public MyAdapter(Context context, ArrayList<File> data) {
+    public FileAdapter(Context context, ArrayList<File> data) {
         mContext = context;
         fileArrayList = data;
         mLayoutInflater = LayoutInflater.from(mContext);

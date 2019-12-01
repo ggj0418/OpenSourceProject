@@ -3,7 +3,6 @@ package com.example.opensourceproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,24 +16,25 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FileUploadActivity extends AppCompatActivity {
 
-    private TextView toUploadText, fileNameText, userIdText, psedonimIdText, contentText, objectText;
-    private Button psedonimButton, encryptButton, uploadButton;
+    private APIInterface apiInterface;
+
+    private TextView toUploadText, fileNameText, userIdText, contentText, objectText;
+    private Button encryptButton, uploadButton;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6;
     private CheckBox checkBox7, checkBox8, checkBox9, checkBox10, checkBox11, checkBox12;
 
     private ListView listView;
-    private MyAdapter myAdapter;
+    private FileAdapter fileAdapter;
 
     private java.io.File internalDir;
 
@@ -53,27 +53,29 @@ public class FileUploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_file_upload);
 
         Intent fromMainIntent = getIntent();
-        final String userID = fromMainIntent.getExtras().getString("userID");
+        final String userID = fromMainIntent.getExtras().getString("loginID");
+        final String remarks = fromMainIntent.getExtras().getString("remarks");
+
+        apiInterface = APIClient.getClient().create(APIInterface.class);
 
         internalDir = new java.io.File(getFilesDir().toString());
 
         fileNameText = (TextView) findViewById(R.id.browse_file_name);
         contentText = (TextView) findViewById(R.id.browse_file_content);
         userIdText = (TextView) findViewById(R.id.browse_user_id);
-        psedonimIdText = (TextView) findViewById(R.id.browse_psedonim_id);
         objectText = (TextView) findViewById(R.id.objectText);
 
         listView = (ListView) findViewById(R.id.fileListView);
-        myAdapter = new MyAdapter(this, fileDataList);
-        listView.setAdapter(myAdapter);
+        fileAdapter = new FileAdapter(this, fileDataList);
+        listView.setAdapter(fileAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int i, long l) {
-                fileNameText.setText(myAdapter.getItem(i).getFileName());
+                fileNameText.setText(fileAdapter.getItem(i).getFileName());
                 userIdText.setText(userID);
 
-                java.io.File readFile = new java.io.File(internalDir, myAdapter.getItem(i).getFileName());
+                java.io.File readFile = new java.io.File(internalDir, fileAdapter.getItem(i).getFileName());
 
                 try {
                     FileReader reader = new FileReader(readFile);
@@ -105,14 +107,6 @@ public class FileUploadActivity extends AppCompatActivity {
         checkBox11 = (CheckBox) findViewById(R.id.checkbox11);
         checkBox12 = (CheckBox) findViewById(R.id.checkbox12);
 
-        psedonimButton = (Button) findViewById(R.id.browse_psedonim_button);
-        psedonimButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String forPsedId = userIdText.getText().toString();
-                psedonimIdText.setText(Encryption.mask(forPsedId, 6));
-            }
-        });
         encryptButton = (Button) findViewById(R.id.encryptButton);
         encryptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +139,7 @@ public class FileUploadActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                makeBodyCall(userID, objectText.getText().toString(), andRemarks, orRemarks);
             }
         });
     }
@@ -165,7 +159,7 @@ public class FileUploadActivity extends AppCompatActivity {
             fileDataList.add(new com.example.opensourceproject.File(f.getName(), f.getPath()));
         }
 
-        myAdapter.notifyDataSetChanged();
+        fileAdapter.notifyDataSetChanged();
     }
 
     private void andCheckBoxBuilder(CheckBox cb) {
@@ -190,5 +184,40 @@ public class FileUploadActivity extends AppCompatActivity {
                 orIndex++;
             }
         }
+    }
+
+    private void makeBodyCall(String userID, String content, String and, String or) {
+        HashMap<String, String> body = new HashMap<>();
+
+        body.put("ID", userID);
+        body.put("Content", content);
+        body.put("AND", and);
+        body.put("OR", or);
+
+        Call<ResponseBody> uploadCall = apiInterface.uploadFile(body);
+        uploadCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result = response.body().string();
+
+                    if(result.equals("SUCCESS")) {
+                        Toast.makeText(getApplicationContext(), "Success to upload", Toast.LENGTH_SHORT).show();
+                        Intent tobrowseIntent = new Intent(FileUploadActivity.this, FileBrowseActivity.class);
+                        startActivity(tobrowseIntent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Success to upload", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

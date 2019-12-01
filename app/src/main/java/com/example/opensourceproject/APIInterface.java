@@ -20,4 +20,8 @@ public interface APIInterface {
     @Headers("Content-Type: application/json")
     @POST("opensource/register")
     Call<ResponseBody> registerUser(@Body HashMap<String, String> body);
+
+    @Headers("Content-Type: application/json")
+    @POST("opensource/upload")
+    Call<ResponseBody> uploadFile(@Body HashMap<String, String> body);
 }

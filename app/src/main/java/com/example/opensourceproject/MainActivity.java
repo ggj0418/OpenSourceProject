@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -60,17 +63,26 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 String result = response.body().string();
 
-                                if (result.equals("SUCCESS")) {
-                                    Toast.makeText(getApplicationContext(), "Welcome!", Toast.LENGTH_SHORT).show();
-                                    Intent toFileIntent = new Intent(MainActivity.this, FileUploadActivity.class);
-                                    toFileIntent.putExtra("userID", id);
-                                    startActivity(toFileIntent);
-                                    finish();
-                                } else if (result.equals("FAIL")) {
+                                if(result.equals("FAIL")) {
                                     Toast.makeText(getApplicationContext(), "Wrong Password!\nPlease check your password", Toast.LENGTH_LONG).show();
-                                } else if (result.equals("NOT EXIST")) {
+                                } else if(result.equals("NOT EXIST")) {
                                     Toast.makeText(getApplicationContext(), "There is no user in this ID\nPlease proceed with the registration process", Toast.LENGTH_LONG).show();
+                                } else {
+                                    JsonParser parser = new JsonParser();
+                                    JsonObject jsonObject = parser.parse(result).getAsJsonObject();
+                                    if(jsonObject.isJsonNull()) {
+                                        Toast.makeText(getApplicationContext(), "No element!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        String loginID = jsonObject.get("LoginID").getAsString();
+                                        String remarks = jsonObject.get("REMARKS").getAsString();
+
+                                        Intent toFileIntent = new Intent(MainActivity.this, FileUploadActivity.class);
+                                        toFileIntent.putExtra("loginID", loginID);
+                                        toFileIntent.putExtra("remarks", remarks);
+                                        startActivity(toFileIntent);
+                                    }
                                 }
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
