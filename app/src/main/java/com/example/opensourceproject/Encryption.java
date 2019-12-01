@@ -1,5 +1,6 @@
 package com.example.opensourceproject;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -72,16 +73,22 @@ public class Encryption {
         for(int i=0;i<temp.length;i++) {
             keyBuilder.append(temp[i].substring(0,1));
         }
+        Integer gap = 16 - keyBuilder.length();
+        if(gap !=0) {
+            for(int j=0;j<gap;j++) {
+                keyBuilder.append("t");
+            }
+        }
         byte[] aesKey = keyBuilder.toString().getBytes();
 
         return aesKey;
     }
 
-    public static String encrypt(String plainText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public static String encrypt(String plainText, String attribute) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         Key secureKey = new SecretKeySpec(createAESKey(attribute), "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, secureKey);
-        byte[] encryptedText = cipher.doFinal(plainText.getBytes());
+        byte[] encryptedText = cipher.doFinal(plainText.getBytes("UTF-8"));
         String encryptResult = new String(encryptedText);
 
         return encryptResult;
