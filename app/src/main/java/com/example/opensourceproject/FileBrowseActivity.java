@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileBrowseActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class FileBrowseActivity extends AppCompatActivity {
 
     private TextView userIdText, fileContentText, policyAndText, policyOrText;
     private TextView plainText, toUploadText;
-    private Button checkPolicyButton, DecryptButton;
+    private Button checkPolicyButton, decryptButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +53,27 @@ public class FileBrowseActivity extends AppCompatActivity {
         policyOrText = (TextView) findViewById(R.id.browse_policy_or);
         plainText = (TextView) findViewById(R.id.plainText);
         toUploadText = (TextView) findViewById(R.id.to_upload_text);
+        toUploadText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toUploadIntent = new Intent(FileBrowseActivity.this, FileUploadActivity.class);
+                toUploadIntent.putExtra("loginID", userID);
+                startActivity(toUploadIntent);
+            }
+        });
+
+        listView = (ListView) findViewById(R.id.fileListView);
+        uploadFileAdapter = new UploadFileAdapter(this, uploadFileArrayList);
+        listView.setAdapter(uploadFileAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
+
+        checkPolicyButton = (Button) findViewById(R.id.check_policy_button);
+        decryptButton = (Button) findViewById(R.id.decrypt_button);
     }
 }
