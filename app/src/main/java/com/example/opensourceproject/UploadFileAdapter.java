@@ -27,7 +27,7 @@ public class UploadFileAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public UploadFile getItem(int i) {
         return uploadFileArrayList.get(i);
     }
 
@@ -40,12 +40,13 @@ public class UploadFileAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View baseView = mLayoutInflater.inflate(R.layout.item_browse_file, null);
         String index = Integer.toString(i+1);
+        String makingID = Encryption.masking(uploadFileArrayList.get(i).getUser());
 
         TextView userText = (TextView) baseView.findViewById(R.id.item_upload_user);
         TextView contentText = (TextView) baseView.findViewById(R.id.item_file_content);
         TextView indexText = (TextView) baseView.findViewById(R.id.index);
 
-        userText.setText(uploadFileArrayList.get(i).getUser());
+        userText.setText(makingID);
         contentText.setText(uploadFileArrayList.get(i).getContent());
         indexText.setText(index);
 

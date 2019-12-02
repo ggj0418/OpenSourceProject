@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                                         Intent toFileIntent = new Intent(MainActivity.this, FileBrowseActivity.class);
                                         toFileIntent.putExtra("loginID", loginID);
                                         toFileIntent.putExtra("remarks", remarks);
+                                        idText.setText("");
+                                        passwordText.setText("");
                                         startActivity(toFileIntent);
                                     }
                                 }

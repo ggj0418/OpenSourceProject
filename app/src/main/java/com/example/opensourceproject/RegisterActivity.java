@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private String id, email, password, city, poCode, mobileNo, remarks;
     private boolean checkSum = false;
-    private Integer andIndex = 0, orIndex = 0;
+    private Integer index = 0;
     private StringBuilder builder = new StringBuilder();
 
     @Override
@@ -67,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         checkBox11 = (CheckBox) findViewById(R.id.checkbox11);
         checkBox12 = (CheckBox) findViewById(R.id.checkbox12);
 
+
         confirmButton = (Button) findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,18 +79,18 @@ public class RegisterActivity extends AppCompatActivity {
                 mobileNo = mobileNoText.getText().toString();
                 city = cityText.getText().toString();
 
-                andCheckBoxBuilder(checkBox1);
-                andCheckBoxBuilder(checkBox2);
-                andCheckBoxBuilder(checkBox3);
-                andCheckBoxBuilder(checkBox4);
-                andCheckBoxBuilder(checkBox5);
-                andCheckBoxBuilder(checkBox6);
-                orCheckBoxBuilder(checkBox7);
-                orCheckBoxBuilder(checkBox8);
-                orCheckBoxBuilder(checkBox9);
-                orCheckBoxBuilder(checkBox10);
-                orCheckBoxBuilder(checkBox11);
-                orCheckBoxBuilder(checkBox12);
+                checkBoxBuilder(checkBox1);
+                checkBoxBuilder(checkBox2);
+                checkBoxBuilder(checkBox3);
+                checkBoxBuilder(checkBox4);
+                checkBoxBuilder(checkBox5);
+                checkBoxBuilder(checkBox6);
+                checkBoxBuilder(checkBox7);
+                checkBoxBuilder(checkBox8);
+                checkBoxBuilder(checkBox9);
+                checkBoxBuilder(checkBox10);
+                checkBoxBuilder(checkBox11);
+                checkBoxBuilder(checkBox12);
 
                 remarks = builder.toString();
                 makeBody();
@@ -110,8 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     finish();
                                 } else if(result.equals("FAIL")) {
                                     Toast.makeText(getApplicationContext(), "Register Fail\nPlease check your information", Toast.LENGTH_LONG).show();
-                                    andIndex = 0;
-                                    orIndex = 0;
+                                    index = 0;
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -121,8 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
-                            andIndex = 0;
-                            orIndex = 0;
+                            index = 0;
                         }
                     });
                 } else {
@@ -144,26 +143,14 @@ public class RegisterActivity extends AppCompatActivity {
         checkSum = true;
     }
 
-    private void andCheckBoxBuilder(CheckBox cb) {
+    private void checkBoxBuilder(CheckBox cb) {
         if(cb.isChecked()) {
-            if(andIndex == 0) {
+            if(index == 0) {
                 builder.append(cb.getText().toString());
-                andIndex++;
+                index++;
             } else {
                 builder.append(",").append(cb.getText().toString());
-                andIndex++;
-            }
-        }
-    }
-
-    private void orCheckBoxBuilder(CheckBox cb) {
-        if(cb.isChecked()) {
-            if(orIndex == 0) {
-                builder.append(",,").append(cb.getText().toString());
-                orIndex++;
-            } else {
-                builder.append(",").append(cb.getText().toString());
-                orIndex++;
+                index++;
             }
         }
     }

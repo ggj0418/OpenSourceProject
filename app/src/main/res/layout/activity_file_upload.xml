@@ -137,10 +137,10 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/andButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:enabled="false"
             android:background="#000000"
             android:textColor="#FFFFFF"
             android:text="AND" />
@@ -152,10 +152,10 @@
             android:background="#FFFFFF"/>
 
         <Button
+            android:id="@+id/orButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:enabled="false"
             android:background="#000000"
             android:textColor="#FFFFFF"
             android:text="OR" />

@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="6.5"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:text="Upload User"/>
@@ -35,6 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
+                android:layout_marginStart="5dp"
                 android:id="@+id/item_upload_user"/>
 
         </LinearLayout>
@@ -51,7 +52,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="6.5"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:text="File Content"/>
@@ -60,6 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
+                android:layout_marginStart="5dp"
                 android:id="@+id/item_file_content"/>
 
         </LinearLayout>

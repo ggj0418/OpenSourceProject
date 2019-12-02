@@ -15,20 +15,30 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FileBrowseActivity extends AppCompatActivity {
 
     private String userID, remarks;
+    private String andPolicy, orPolicy;
     ArrayList<UploadFile> uploadFileArrayList = new ArrayList<UploadFile>();
 
     private APIInterface apiInterface;
     private ListView listView;
-    private UploadFileAdapter uploadFileAdapter;
+    public UploadFileAdapter uploadFileAdapter;
 
     private TextView userIdText, fileContentText, policyAndText, policyOrText;
     private TextView plainText, toUploadText;
@@ -58,7 +68,9 @@ public class FileBrowseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent toUploadIntent = new Intent(FileBrowseActivity.this, FileUploadActivity.class);
                 toUploadIntent.putExtra("loginID", userID);
+                toUploadIntent.putExtra("remarks", remarks);
                 startActivity(toUploadIntent);
+                finish();
             }
         });
 
@@ -68,12 +80,136 @@ public class FileBrowseActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
+                decryptButton.setEnabled(false);
+                userIdText.setText(Encryption.masking(uploadFileAdapter.getItem(i).getUser()));
+                fileContentText.setText(uploadFileAdapter.getItem(i).getContent());
+                policyAndText.setText(uploadFileAdapter.getItem(i).getAndPolicy());
+                policyOrText.setText(uploadFileAdapter.getItem(i).getOrPolicy());
             }
         });
 
-        checkPolicyButton = (Button) findViewById(R.id.check_policy_button);
         decryptButton = (Button) findViewById(R.id.decrypt_button);
+        decryptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String encryptText = fileContentText.getText().toString();
+                String and = policyAndText.getText().toString();
+                try {
+                    plainText.setText(Encryption.decrypt(encryptText, and));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        checkPolicyButton = (Button) findViewById(R.id.check_policy_button);
+        checkPolicyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] userPolicy = remarks.split(",");
+                String[] fileAndPolicy = policyAndText.getText().toString().split(",");
+                String[] fileOrPolicy = policyOrText.getText().toString().split(",");
+                int index = 0;
+                boolean value1 = false, value2 = false, value3 = false;
+
+                if(!policyAndText.getText().toString().equals("") && !policyOrText.getText().toString().equals("")) {
+                    for(int i=0;i<fileAndPolicy.length;i++) {
+                        for(int j=0;j<userPolicy.length;j++) {
+                            if(fileAndPolicy[i].equals(userPolicy[j])) {
+                                index++;
+                            }
+                        }
+                    }
+                    if(index == fileAndPolicy.length) {
+                        value1 = true;
+                    }
+                    index = 0;
+                    for(int i=0;i<fileOrPolicy.length;i++) {
+                        for(int j=0;j<userPolicy.length;j++) {
+                            if(fileOrPolicy[i].equals(userPolicy[j])) {
+                                index++;
+                            }
+                        }
+                    }
+                    if(index > 0) {
+                        value2 = true;
+                    }
+                    if(value1 && value2) {
+                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        decryptButton.setEnabled(true);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "All policied not match", Toast.LENGTH_LONG).show();
+                    }
+                    index = 0;
+                } else if(policyAndText.getText().toString().equals("")) {
+                    for(int i=0;i<fileOrPolicy.length;i++) {
+                        for(int j=0;j<userPolicy.length;j++) {
+                            if(fileOrPolicy[i].equals(userPolicy[j])) {
+                                index++;
+                            }
+                        }
+                    }
+                    if(index > 0) {
+                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        decryptButton.setEnabled(true);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Or policied not match", Toast.LENGTH_LONG).show();
+                    }
+                    index = 0;
+                } else if(policyOrText.getText().toString().equals("")) {
+                    for(int i=0;i<fileAndPolicy.length;i++) {
+                        for(int j=0;j<userPolicy.length;j++) {
+                            if(fileAndPolicy[i].equals(userPolicy[j])) {
+                                index++;
+                            }
+                        }
+                    }
+                    if(index == fileAndPolicy.length) {
+                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        decryptButton.setEnabled(true);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "And policied not match", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        setBrowseFileList();
+    }
+
+    private void setBrowseFileList() {
+        Call<ResponseBody> browseFileCall = apiInterface.browseFile();
+        browseFileCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String result = response.body().string();
+                    JsonParser parser = new JsonParser();
+                    JsonArray jsonArray = parser.parse(result).getAsJsonArray();
+                    JsonObject jsonObject;
+
+                    for(int i=0;i<jsonArray.size();i++) {
+                        jsonObject = (JsonObject) jsonArray.get(i);
+
+                        uploadFileArrayList.add(
+                                new UploadFile(
+                                        jsonObject.get("ID").getAsString(),
+                                        jsonObject.get("Content").getAsString(),
+                                        jsonObject.get("AND").getAsString(),
+                                        jsonObject.get("OR").getAsString()
+                                        ));
+                    }
+
+                    uploadFileAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Success to upload", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

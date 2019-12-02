@@ -25,9 +25,7 @@
         <ListView
             android:id="@+id/fileListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_height="match_parent">
 
         </ListView>
 
@@ -83,7 +81,6 @@
                 android:textStyle="bold" />
 
             <ScrollView
-                android:id="@+id/scrollView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
@@ -116,13 +113,19 @@
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/browse_policy_and"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
-                android:paddingStart="10dp"
-                android:textSize="20dp" />
+                android:paddingStart="10dp">
+
+                <TextView
+                    android:id="@+id/browse_policy_and"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp" />
+
+            </ScrollView>
 
         </LinearLayout>
 
@@ -143,13 +146,19 @@
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/browse_policy_or"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
-                android:paddingStart="10dp"
-                android:textSize="20dp" />
+                android:paddingStart="10dp">
+
+                <TextView
+                    android:id="@+id/browse_policy_or"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp" />
+
+            </ScrollView>
 
         </LinearLayout>
 

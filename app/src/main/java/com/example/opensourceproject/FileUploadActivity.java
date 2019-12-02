@@ -32,6 +32,7 @@ public class FileUploadActivity extends AppCompatActivity {
     private Button encryptButton, uploadButton;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6;
     private CheckBox checkBox7, checkBox8, checkBox9, checkBox10, checkBox11, checkBox12;
+    private Button andButton, orButton;
 
     private ListView listView;
     private FileAdapter fileAdapter;
@@ -42,6 +43,7 @@ public class FileUploadActivity extends AppCompatActivity {
     private StringBuilder andBuilder = new StringBuilder();
     private StringBuilder orBuilder = new StringBuilder();
     private String andRemarks, orRemarks;
+    private String userID, remarks;
 
     ArrayList<com.example.opensourceproject.File> fileDataList = new ArrayList<com.example.opensourceproject.File>();
 
@@ -53,8 +55,8 @@ public class FileUploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_file_upload);
 
         Intent fromMainIntent = getIntent();
-        final String userID = fromMainIntent.getExtras().getString("loginID");
-//        final String remarks = fromMainIntent.getExtras().getString("remarks");
+        userID = fromMainIntent.getExtras().getString("loginID");
+        remarks = fromMainIntent.getExtras().getString("remarks");
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
@@ -107,8 +109,8 @@ public class FileUploadActivity extends AppCompatActivity {
         checkBox11 = (CheckBox) findViewById(R.id.checkbox11);
         checkBox12 = (CheckBox) findViewById(R.id.checkbox12);
 
-        encryptButton = (Button) findViewById(R.id.encryptButton);
-        encryptButton.setOnClickListener(new View.OnClickListener() {
+        andButton = (Button) findViewById(R.id.andButton);
+        andButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 andCheckBoxBuilder(checkBox1);
@@ -117,6 +119,37 @@ public class FileUploadActivity extends AppCompatActivity {
                 andCheckBoxBuilder(checkBox4);
                 andCheckBoxBuilder(checkBox5);
                 andCheckBoxBuilder(checkBox6);
+                andCheckBoxBuilder(checkBox7);
+                andCheckBoxBuilder(checkBox8);
+                andCheckBoxBuilder(checkBox9);
+                andCheckBoxBuilder(checkBox10);
+                andCheckBoxBuilder(checkBox11);
+                andCheckBoxBuilder(checkBox12);
+
+                checkBox1.setChecked(false);
+                checkBox2.setChecked(false);
+                checkBox3.setChecked(false);
+                checkBox4.setChecked(false);
+                checkBox5.setChecked(false);
+                checkBox6.setChecked(false);
+                checkBox7.setChecked(false);
+                checkBox8.setChecked(false);
+                checkBox9.setChecked(false);
+                checkBox10.setChecked(false);
+                checkBox11.setChecked(false);
+                checkBox12.setChecked(false);
+            }
+        });
+        orButton = (Button) findViewById(R.id.orButton);
+        orButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                orCheckBoxBuilder(checkBox1);
+                orCheckBoxBuilder(checkBox2);
+                orCheckBoxBuilder(checkBox3);
+                orCheckBoxBuilder(checkBox4);
+                orCheckBoxBuilder(checkBox5);
+                orCheckBoxBuilder(checkBox6);
                 orCheckBoxBuilder(checkBox7);
                 orCheckBoxBuilder(checkBox8);
                 orCheckBoxBuilder(checkBox9);
@@ -124,6 +157,25 @@ public class FileUploadActivity extends AppCompatActivity {
                 orCheckBoxBuilder(checkBox11);
                 orCheckBoxBuilder(checkBox12);
 
+                checkBox1.setChecked(false);
+                checkBox2.setChecked(false);
+                checkBox3.setChecked(false);
+                checkBox4.setChecked(false);
+                checkBox5.setChecked(false);
+                checkBox6.setChecked(false);
+                checkBox7.setChecked(false);
+                checkBox8.setChecked(false);
+                checkBox9.setChecked(false);
+                checkBox10.setChecked(false);
+                checkBox11.setChecked(false);
+                checkBox12.setChecked(false);
+            }
+        });
+
+        encryptButton = (Button) findViewById(R.id.encryptButton);
+        encryptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 andRemarks = andBuilder.toString();
                 orRemarks = orBuilder.toString();
 
@@ -186,7 +238,7 @@ public class FileUploadActivity extends AppCompatActivity {
         }
     }
 
-    private void makeBodyCall(String userID, String content, String and, String or) {
+    private void makeBodyCall(final String userID, String content, String and, String or) {
         HashMap<String, String> body = new HashMap<>();
 
         body.put("ID", userID);
@@ -203,11 +255,13 @@ public class FileUploadActivity extends AppCompatActivity {
 
                     if(result.equals("SUCCESS")) {
                         Toast.makeText(getApplicationContext(), "Success to upload", Toast.LENGTH_SHORT).show();
-                        Intent tobrowseIntent = new Intent(FileUploadActivity.this, FileBrowseActivity.class);
-                        startActivity(tobrowseIntent);
+                        Intent toBrowseIntent = new Intent(FileUploadActivity.this, FileBrowseActivity.class);
+                        toBrowseIntent.putExtra("userID", userID);
+                        toBrowseIntent.putExtra("remarks", remarks);
+                        startActivity(toBrowseIntent);
                         finish();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Success to upload", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Fail to upload", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

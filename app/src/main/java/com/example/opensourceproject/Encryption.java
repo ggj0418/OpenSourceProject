@@ -48,7 +48,7 @@ public class Encryption {
         return new String(data);
     }
 
-    private static String masking(String pre_string) {
+    public static String masking(String pre_string) {
         String result = "";
         char[] charList = pre_string.toCharArray();
         for(int i=0;i<pre_string.length()-2;i++) {
@@ -57,23 +57,6 @@ public class Encryption {
         result = new String(charList);
         return result;
     }
-
-//    public static byte[] encrypt(byte[] data) {
-//        byte[] enc = new byte[data.length];
-//        for(int i=0;i<data.length;i++) {
-//            enc[i] = (byte) ((i % 2 == 0) ? data[i] + 1 : data[i] - 1);
-//
-//        }
-//        return enc;
-//    }
-//
-//    public static byte[] decrypt(byte[] data) {
-//        byte[] dec = new byte[data.length];
-//        for(int i=0;i<data.length;i++) {
-//            dec[i] = (byte) ((i % 2 == 0) ? data[i] - 1 : data[i] + 1);
-//        }
-//        return dec;
-//    }
 
     public static byte[] createAESKey(String andAttribute) throws UnsupportedEncodingException {
         String[] temp = andAttribute.split(",");
@@ -97,9 +80,14 @@ public class Encryption {
         byte bytes[] = new byte[20];
         random.nextBytes(bytes);
         byte[] saltBytes = bytes;
+        PBEKeySpec spec;
 
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        PBEKeySpec spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+        if(attribute.equals("")) {
+            spec = new PBEKeySpec("1".toCharArray(), saltBytes, 1000, 256);
+        } else {
+            spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+        }
 
         SecretKey secretKey = factory.generateSecret(spec);
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
@@ -122,6 +110,7 @@ public class Encryption {
     public static String decrypt(String encryptText, String attribute) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         ByteBuffer buffer = ByteBuffer.wrap(Base64.getDecoder().decode(encryptText));
+        PBEKeySpec spec;
 
         byte[] saltBytes = new byte[20];
         buffer.get(saltBytes, 0, saltBytes.length);
@@ -131,7 +120,11 @@ public class Encryption {
         buffer.get(encryoptedTextBytes);
 
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        PBEKeySpec spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+        if(attribute.equals("")) {
+            spec = new PBEKeySpec("1".toCharArray(), saltBytes, 1000, 256);
+        } else {
+            spec = new PBEKeySpec(attribute.toCharArray(), saltBytes, 1000, 256);
+        }
 
         SecretKey secretKey = factory.generateSecret(spec);
         SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
