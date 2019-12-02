@@ -81,6 +81,7 @@ public class FileBrowseActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int i, long l) {
+                plainText.setText("");
                 decryptButton.setEnabled(false);
                 userIdText.setText(Encryption.masking(uploadFileAdapter.getItem(i).getUser()));
                 fileContentText.setText(uploadFileAdapter.getItem(i).getContent());
