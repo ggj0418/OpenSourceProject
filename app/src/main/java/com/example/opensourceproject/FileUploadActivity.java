@@ -30,6 +30,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/*
+This activity is for uploading a file in your device.
+You can upload it including your masked userID, encrypted content and policies.
+When you choose policies, the process is a little bit complicated.
+After you choose a file willing to upload, click the checkboxes you want to use as 'AND' policies. And click the 'AND' button.
+Then the chosen checkboxes will be unset and values will stored.
+The process to choose 'OR' policies is same with 'AND' one. Click the the checkboxes you want to use as 'OR' policies and the 'OR' button, either.
+All values are ready to be uploade. The only work you should do is to click the upload button.
+Back button is a way to FileBrowseActivity.
+ */
+
 public class FileUploadActivity extends AppCompatActivity {
 
     private APIInterface apiInterface;
@@ -132,18 +143,7 @@ public class FileUploadActivity extends AppCompatActivity {
                 andCheckBoxBuilder(checkBox11);
                 andCheckBoxBuilder(checkBox12);
 
-                checkBox1.setChecked(false);
-                checkBox2.setChecked(false);
-                checkBox3.setChecked(false);
-                checkBox4.setChecked(false);
-                checkBox5.setChecked(false);
-                checkBox6.setChecked(false);
-                checkBox7.setChecked(false);
-                checkBox8.setChecked(false);
-                checkBox9.setChecked(false);
-                checkBox10.setChecked(false);
-                checkBox11.setChecked(false);
-                checkBox12.setChecked(false);
+                unsetCheckBox();
             }
         });
         orButton = (Button) findViewById(R.id.orButton);
@@ -163,18 +163,7 @@ public class FileUploadActivity extends AppCompatActivity {
                 orCheckBoxBuilder(checkBox11);
                 orCheckBoxBuilder(checkBox12);
 
-                checkBox1.setChecked(false);
-                checkBox2.setChecked(false);
-                checkBox3.setChecked(false);
-                checkBox4.setChecked(false);
-                checkBox5.setChecked(false);
-                checkBox6.setChecked(false);
-                checkBox7.setChecked(false);
-                checkBox8.setChecked(false);
-                checkBox9.setChecked(false);
-                checkBox10.setChecked(false);
-                checkBox11.setChecked(false);
-                checkBox12.setChecked(false);
+                unsetCheckBox();
             }
         });
 
@@ -202,6 +191,7 @@ public class FileUploadActivity extends AppCompatActivity {
         });
     }
 
+    // Search your files in inner storage
     public void searchTextFile() {
         java.io.File file = new java.io.File(getFilesDir().toString());
 
@@ -242,6 +232,21 @@ public class FileUploadActivity extends AppCompatActivity {
                 orIndex++;
             }
         }
+    }
+
+    private void unsetCheckBox() {
+        checkBox1.setChecked(false);
+        checkBox2.setChecked(false);
+        checkBox3.setChecked(false);
+        checkBox4.setChecked(false);
+        checkBox5.setChecked(false);
+        checkBox6.setChecked(false);
+        checkBox7.setChecked(false);
+        checkBox8.setChecked(false);
+        checkBox9.setChecked(false);
+        checkBox10.setChecked(false);
+        checkBox11.setChecked(false);
+        checkBox12.setChecked(false);
     }
 
     private void makeBodyCall(final String userID, String content, String and, String or) {

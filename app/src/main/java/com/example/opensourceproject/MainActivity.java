@@ -23,6 +23,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/*
+This Activity is login one.
+It has three cases in success or fail.
+At first, your id is correct but the password isn't. In this case, only passwordEditText is cleaned up and focused on.
+Secondly, your id doesn't exist in our DB. In this case, both idEditText and passwordEditText are cleaned up and idEditText is focused on.
+The last case is succeed! After you login, FileBrowseActivity will be appeared in the screen.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private APIInterface apiInterface;
@@ -67,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(result.equals("FAIL")) {
                                     Toast.makeText(getApplicationContext(), "Wrong Password!\nPlease check your password", Toast.LENGTH_LONG).show();
+                                    passwordText.setText("");
                                     passwordText.requestFocus();
                                 } else if(result.equals("NOT EXIST")) {
                                     Toast.makeText(getApplicationContext(), "There is no user in this ID\nPlease proceed with the registration process", Toast.LENGTH_LONG).show();

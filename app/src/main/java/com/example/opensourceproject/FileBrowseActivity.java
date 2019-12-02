@@ -28,6 +28,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/*
+This Activity is for browsing a file uploaded in server.
+If your policies which are chosen in the registering process match with file's policys, you can decrypt it.
+ */
+
 public class FileBrowseActivity extends AppCompatActivity {
 
     private String userID, remarks;

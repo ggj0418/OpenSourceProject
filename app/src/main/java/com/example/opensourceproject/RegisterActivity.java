@@ -22,6 +22,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/*
+This activity is for registeration.
+Fill in the all attributes and click the confirm button.
+If you succeed to register, your screen is appeared a MainActivity(Login).
+ */
+
 public class RegisterActivity extends AppCompatActivity {
 
     private APIInterface apiInterface;
