@@ -285,4 +285,13 @@ public class FileUploadActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(FileUploadActivity.this, FileBrowseActivity.class);
+        intent.putExtra("userID", userID);
+        intent.putExtra("remarks", remarks);
+        startActivity(intent);
+        finish();
+    }
 }
