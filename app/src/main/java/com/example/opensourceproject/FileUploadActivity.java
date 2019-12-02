@@ -13,6 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.opensourceproject.Class.File;
+import com.example.opensourceproject.Utils.APIClient;
+import com.example.opensourceproject.Utils.APIInterface;
+import com.example.opensourceproject.Utils.Encryption;
+import com.example.opensourceproject.Utils.FileAdapter;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,7 +51,7 @@ public class FileUploadActivity extends AppCompatActivity {
     private String andRemarks, orRemarks;
     private String userID, remarks;
 
-    ArrayList<com.example.opensourceproject.File> fileDataList = new ArrayList<com.example.opensourceproject.File>();
+    ArrayList<File> fileDataList = new ArrayList<File>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +214,7 @@ public class FileUploadActivity extends AppCompatActivity {
         java.io.File[] files = file.listFiles();
 
         for (java.io.File f : files) {
-            fileDataList.add(new com.example.opensourceproject.File(f.getName(), f.getPath()));
+            fileDataList.add(new File(f.getName(), f.getPath()));
         }
 
         fileAdapter.notifyDataSetChanged();

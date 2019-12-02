@@ -11,16 +11,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.opensourceproject.Utils.APIClient;
+import com.example.opensourceproject.Utils.APIInterface;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Body;
 
 public class RegisterActivity extends AppCompatActivity {
 

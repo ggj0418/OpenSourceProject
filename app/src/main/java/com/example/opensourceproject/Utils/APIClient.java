@@ -1,4 +1,4 @@
-package com.example.opensourceproject;
+package com.example.opensourceproject.Utils;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

@@ -3,27 +3,25 @@ package com.example.opensourceproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.opensourceproject.Class.UploadFile;
+import com.example.opensourceproject.Utils.APIClient;
+import com.example.opensourceproject.Utils.APIInterface;
+import com.example.opensourceproject.Utils.Encryption;
+import com.example.opensourceproject.Utils.UploadFileAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

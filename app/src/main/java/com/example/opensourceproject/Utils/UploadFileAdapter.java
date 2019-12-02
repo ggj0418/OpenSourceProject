@@ -1,4 +1,4 @@
-package com.example.opensourceproject;
+package com.example.opensourceproject.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.opensourceproject.R;
+import com.example.opensourceproject.Class.UploadFile;
 
 import java.util.ArrayList;
 

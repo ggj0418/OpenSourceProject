@@ -1,4 +1,4 @@
-package com.example.opensourceproject;
+package com.example.opensourceproject.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

@@ -1,4 +1,4 @@
-package com.example.opensourceproject;
+package com.example.opensourceproject.Class;
 
 public class UploadFile {
     public String user;

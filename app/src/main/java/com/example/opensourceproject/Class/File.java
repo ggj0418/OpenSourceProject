@@ -1,4 +1,4 @@
-package com.example.opensourceproject;
+package com.example.opensourceproject.Class;
 
 public class File {
     public String fileName;
