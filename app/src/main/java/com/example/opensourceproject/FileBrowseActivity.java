@@ -123,22 +123,19 @@ public class FileBrowseActivity extends AppCompatActivity {
                     if(index == fileAndPolicy.length) {
                         value1 = true;
                     }
-                    index = 0;
                     for(int i=0;i<fileOrPolicy.length;i++) {
                         for(int j=0;j<userPolicy.length;j++) {
                             if(fileOrPolicy[i].equals(userPolicy[j])) {
-                                index++;
+                                value2 = true;
+                                break;
                             }
                         }
                     }
-                    if(index > 0) {
-                        value2 = true;
-                    }
                     if(value1 && value2) {
-                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "All policied not match", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_LONG).show();
                     }
                     index = 0;
                 } else if(policyAndText.getText().toString().equals("")) {
@@ -150,10 +147,10 @@ public class FileBrowseActivity extends AppCompatActivity {
                         }
                     }
                     if(index > 0) {
-                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Or policied not match", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "4", Toast.LENGTH_LONG).show();
                     }
                     index = 0;
                 } else if(policyOrText.getText().toString().equals("")) {
@@ -165,10 +162,10 @@ public class FileBrowseActivity extends AppCompatActivity {
                         }
                     }
                     if(index == fileAndPolicy.length) {
-                        Toast.makeText(getApplicationContext(), "All policies match!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "5", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "And policied not match", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "6", Toast.LENGTH_LONG).show();
                     }
                 }
             }
