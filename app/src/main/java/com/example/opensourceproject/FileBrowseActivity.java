@@ -131,10 +131,10 @@ public class FileBrowseActivity extends AppCompatActivity {
                         }
                     }
                     if(value1 && value2) {
-                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
                     }
                     index = 0;
                 } else if(policyAndText.getText().toString().equals("")) {
@@ -146,10 +146,10 @@ public class FileBrowseActivity extends AppCompatActivity {
                         }
                     }
                     if(index > 0) {
-                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
                     }
                     index = 0;
                 } else if(policyOrText.getText().toString().equals("")) {
@@ -161,10 +161,10 @@ public class FileBrowseActivity extends AppCompatActivity {
                         }
                     }
                     if(index == fileAndPolicy.length) {
-                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
                         decryptButton.setEnabled(true);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Policy Check Success\nYou can decrypt this file", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Policy Check Fail", Toast.LENGTH_LONG).show();
                     }
                 }
             }
