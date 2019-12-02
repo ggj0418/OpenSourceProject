@@ -67,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(result.equals("FAIL")) {
                                     Toast.makeText(getApplicationContext(), "Wrong Password!\nPlease check your password", Toast.LENGTH_LONG).show();
-                                    idText.requestFocus();
+                                    passwordText.requestFocus();
                                 } else if(result.equals("NOT EXIST")) {
                                     Toast.makeText(getApplicationContext(), "There is no user in this ID\nPlease proceed with the registration process", Toast.LENGTH_LONG).show();
+                                    idText.setText("");
+                                    passwordText.setText("");
                                     idText.requestFocus();
                                 } else {
                                     JsonParser parser = new JsonParser();
